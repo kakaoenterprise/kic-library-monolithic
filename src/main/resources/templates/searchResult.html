@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" />
+
+<th:block layout:fragment="content_list">
+
+    <div class="form-group">
+
+        <table class="form-table" border="1px">
+            <tr>
+                <th><label>도서코드</label></th>
+                <th><label>도서명</label></th>
+                <th><label>출판사</label></th>
+                <th><label>출판일</label></th>
+                <th><label>저자</label></th>
+                <th><label>상태</label></th>
+            </tr>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.bookId}">DDD</td>
+                <td th:text="${book.name}">DDD</td>
+                <td th:text="${book.company}">위키북스</td>
+                <td th:text="${book.publishDate}">2021-03-02</td>
+                <td th:text="${book.writer}">에릭 에반스</td>
+                <td th:text="${book.status}">최초등록</td>
+            </tr>
+
+        </table>
+
+        <script>
+            $("#detail_submit").click( function(){
+                console.log("register_submit.click");
+                $.ajax({
+                    url: "/management/book",
+                    method: "POST",
+                    dataType: "json",
+                    contextType:"application/json",
+                    data: {
+                        "category": $("#category").val(),
+                        "name": $("#name").val(),
+                        "publishDate": $("#publishDate").val(),
+                        "company": $("#company").val(),
+                        "writer": $("#writer").val(),
+                        "quantity": $("#quantity").val()
+                    },
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader("jwt_token", $.cookie("jwt_token"));
+                    },
+                    success: function(data, textStatus, request){
+                        console.log("data : " + data);
+
+                        submitView('/search');
+                    },
+                    error: function(data, textStatus, error){
+                        console.log("error:"+textStatus+ "/"+ error);
+                    }
+                });
+            })
+
+        </script>
+    </div>
+</th:block>
+</html>

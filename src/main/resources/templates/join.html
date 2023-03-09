@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<!--
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+-->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/css/mngr.css" th:href="@{/css/mngr.css}"/>
+</th:block>
+<th:block layout:fragment="content">
+    <div>
+        <h2> 도서관리자 가입 </h2>
+    </div>
+    <div class="form-group">
+    <form th:action="@{/join}" th:object="${manager}" method="post">
+        <table class="form-table">
+            <tr>
+                <td><label for="librarianId">ID*</label></td>
+                <td>
+                    <input type="text" th:field="*{librarianId}" id="librarianId" placeholder="id">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('librarianId')}" th:errors="*{librarianId}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="password">Password*</label></td>
+                <td>
+                    <input type="password" th:field="*{password}" id="password" placeholder="password">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="name">Name*</label></td>
+                <td>
+                    <input type="text" th:field="*{name}" id="name" placeholder="name">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="role">Role</label></td>
+                <td>
+                    <input type="text" th:field="*{role}" id="role" placeholder="manager">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="gender">Gender</label></td>
+                <td>
+                    <input type="text" th:field="*{gender}" id="gender" placeholder="male/female/other">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="birthDay">BirthDay</label></td>
+                <td>
+                    <input type="text" th:field="*{birthDay}" id="birthDay" placeholder="1999-09-10">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('birthDay')}" th:errors="*{birthDay}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="address">Address</label></td>
+                <td>
+                    <input type="text" th:field="*{address}" id="address" placeholder="pangyo">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="phone">Phone</label></td>
+                <td>
+                    <input type="text" th:field="*{phone}" id="phone" placeholder="010-3333-3333">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="email">Email*</label></td>
+                <td>
+                    <input type="text" th:field="*{email}" id="email" placeholder="test@libraray.com">
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </td>
+            </tr>
+        </table>
+        <div class="submit">
+            <button type="button" name="join" id="join_submit">Join to Librarian</button>
+        </div>
+    </form>
+
+        <script>
+            $("#join_submit").click( function(){
+                console.log("join_submit.click");
+                $.ajax({
+                    url: "/manageraccount/user",
+                    method: "POST",
+                    dataType: "json",
+                    contextType:"application/json",
+                    data: {
+                        "librarianId": $("#librarianId").val(),
+                        "name": $("#name").val(),
+                        "role": $("#role").val(),
+                        "gender": $("#gender").val(),
+                        "birthDay": $("#birthDay").val(),
+                        "address": $("#address").val(),
+                        "password": $("#password").val(),
+                        "phone": $("#phone").val(),
+                        "email": $("#email").val(),
+                    },
+                    success: function(data, textStatus, request){
+                        //request.getResponseHeader('token');
+                        //console.log("response token : " + request.getResponseHeader('token')+" :" + data);
+                        console.log("data : " + data);
+                        alert("가입처리가 되었습니다. \n Login 화면으로 이동합니다.");
+                        loginView();
+                    },
+                    error: function(data, textStatus, error){
+                        console.log("error:"+textStatus+ "/"+ error);
+
+                    }
+                });
+            })
+
+        </script>
+    </div>
+</th:block>
+</html>

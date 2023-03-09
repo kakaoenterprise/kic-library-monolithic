@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+        <header th:fragment="headerFragment">
+            <div class="header">
+                <a href="/">kakaoenterprise 도서관</a>
+            </div>
+            <nav>
+                <img alt="라이언" src="/images/ryan_img.png">
+                <select class="searchSelect" id="searchType" th:object="${searchTypes}">
+                    <option th:each="searchType : ${searchTypes}"
+                            th:value="${searchType}"
+                            th:text="${searchType}"></option>
+                </select>
+                <label for="searchType">검색 유형 선택</label>
+                <input type="text" id="searchText" class="searchBox" size="30">
+                <label for="searchText">도서명 입력</label>
+                <button type="button" id="searchButton" class="searchButton" style="cursor:pointer">도서 검색</button>
+            </nav>
+            <script>
+                $('#searchButton').click(function() {
+                    const searchType = $('#searchType').val();
+                    const searchData = $('#searchText').val();
+                    let url;
+
+                    if (searchData) {
+                        url = '/result/' + searchType + '/' + searchData;
+                    } else {
+                        url = '/result';
+                    }
+                    location.href = url;
+                })
+            </script>
+        </header>
+    </body>
+
+</html>

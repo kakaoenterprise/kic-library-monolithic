@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" />
+
+<th:block layout:fragment="content">
+    <div id="content">
+        <h2> 도서 검색 </h2>
+        <div class="form-group">
+            <form method="post" th:object="${book}" >
+                <table align="center">
+                    <tr>
+                        <td align="center">
+                            <table class="form-table">
+                                <tr>
+                                    <td>
+                                        <span>
+                                        <select th:object="${searchTypes}"  class="form-control" name="searchTypes" id="searchTypes">
+                                        <option th:each="searchType : ${searchTypes}"
+                                                th:value="${searchType}"
+                                                th:text="${searchType}" />
+                                        </select>
+                                        </span>
+                                    <td>
+                                        <input type="text" id="searchData" >
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <button type="button" name="search" id="search_submit">검 색</button>
+
+                                            <button type="button" name="home" id="home_submit">HOME</button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <div id="search_result">
+                                <table class="form-table" border="1px">
+                                    <tr>
+                                        <th><label>도서코드</label></th>
+                                        <th><label>도서명</label></th>
+                                        <th><label>출판사</label></th>
+                                        <th><label>출판일</label></th>
+                                        <th><label>저자</label></th>
+                                        <th><label>상태</label></th>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+            </form>
+        </div>
+        <script>
+            $("#search_submit").click( function(){
+                let searchType = $("#searchTypes").val();
+                let searchData = $("#searchData").val();
+                console.log("search_submit.click" + searchType + searchData);
+                $.ajax({
+                    url: "/searchResult/"+searchType+"/"+searchData,
+                    method: "GET",
+                    //dataType: "json",
+                    //contextType:"application/json",
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader("jwt_token", $.cookie("jwt_token"));
+                    },
+                    success: function(data, textStatus, request){
+                        console.log("data : " + data);
+                        $("#search_result").html(data);
+                    },
+                    error: function(data, textStatus, error){
+                        console.log("error:"+textStatus+ "/"+ error);
+                    }
+                });
+            })
+
+            $("#home_submit").click(function(){
+                submitView("/home");
+            });
+
+        </script>
+    </div>
+</th:block>
+</html>

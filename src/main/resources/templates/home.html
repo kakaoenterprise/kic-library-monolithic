@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" />
+
+<th:block layout:fragment="content">
+  <div id="contents">
+    <div class="form-group">
+            <span th:if="${session.authenticated} == 'false'">
+                <p> 로그인이 필요합니다. 우측 상단의 로그인을 선택해주세요. </p>
+            </span>
+            <span th:if="${session.authenticated} == 'true'">
+                <p> 도서등록 또는 검색을 할 수 있습니다. </p>
+                <div>
+                    <button type="button" id="registerbook" name="registerbook" >도서등록</button>
+                    <button type="button" id="searchbook" name="searchbook" >도서검색</button>
+                </div>
+            </span>
+    </div>
+
+    <script th:inline="javascript">
+        $("#registerbook").click(function(){
+            submitView("/register");
+        });
+        $("#searchbook").click(function(){
+            submitView("/search");
+        });
+    </script>
+  </div>
+
+</th:block>
+</html>

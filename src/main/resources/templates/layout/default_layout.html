@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- config fragment 사용 -->
+<th:block th:replace="fragment/config :: configFragment" ></th:block>
+
+<body>
+<!-- header fragment 사용 -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+
+<!--
+    content fragment 사용
+    현재 layout을 사용하는 content fragment의 내용을 삽입한다.
+-->
+<th:block th:replace="home" layout:fragment="content"></th:block>
+
+
+<!-- footer fragment 사용 -->
+<th:block th:replace="fragment/footer :: footer"> </th:block>
+</body>
+
+</html>

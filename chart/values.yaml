@@ -1,0 +1,9 @@
+app:
+  name: library-k8s
+  profile:
+  replicaCount: 1
+  hostAliases: []
+  image: ${CONTAINER_REGISTRY_URI}/test-img:latest
+  resources: {}
+  service:
+    type: LoadBalancer

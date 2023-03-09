@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" />
+
+<th:block layout:fragment="content">
+    <div id="contents">
+        <h2> 도서 등록 </h2>
+
+        <div class="form-group">
+            <form method="post" th:object="${book}" >
+                <table class="form-table">
+                    <tr>
+                        <td><label for="name">도서명*</label></td>
+                        <td>
+                            <input type="text" th:field="*{name}" id="name" placeholder="name">
+                        </td>
+                        <td>
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="publishDate">출판일</label></td>
+                        <td>
+                            <input type="text" th:field="*{publishDate}" id="publishDate" placeholder="1999-09-10">
+                        </td>
+                        <td>
+                            <span th:if="${#fields.hasErrors('publishDate')}" th:errors="*{publishDate}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="company">출판사</label></td>
+                        <td>
+                            <input type="text" th:field="*{company}" id="company" placeholder="KEP">
+                        </td>
+                        <td>
+                            <span th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>카테고리*</label></td>
+                        <td>
+                            <select th:object="${category}"  class="form-control" name="category" id="category">
+                            <option th:each="categoryItem : ${category}"
+                                    th:value="${categoryItem.getId()}"
+                                    th:text="${categoryItem.getName()}" />
+                            </select>
+                        </td>
+                        <td>
+                            <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="writer">저자</label></td>
+                        <td>
+                            <input type="text" th:field="*{writer}" id="writer" placeholder="홍길동">
+                        </td>
+                        <td>
+                            <span th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="quantity">수량</label></td>
+                        <td>
+                            <input type="text" th:field="*{quantity}" id="quantity">
+                        </td>
+                        <td>
+                            <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></span>
+                        </td>
+                    </tr>
+
+                </table>
+                <div class="submit">
+                    <button type="button" name="register" id="register_submit">등 록</button>
+                    <button type="button" name="cancle" id="cancle_submit">취 소</button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            $("#register_submit").click( function(){
+                console.log("register_submit.click");
+                $.ajax({
+                    url: "/management/book",
+                    method: "POST",
+                    dataType: "json",
+                    contextType:"application/json",
+                    data: {
+                        "category": $("#category").val(),
+                        "name": $("#name").val(),
+                        "publishDate": $("#publishDate").val(),
+                        "company": $("#company").val(),
+                        "writer": $("#writer").val(),
+                        "quantity": $("#quantity").val()
+                    },
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader("jwt_token", $.cookie("jwt_token"));
+                    },
+                    success: function(data, textStatus, request){
+                        console.log("data : " + data);
+                        alert("도서가 등록 되었습니다.");
+                        submitView('/search');
+                    },
+                    error: function(data, textStatus, error){
+                        console.log("error:"+textStatus+ "/"+ error);
+                    }
+                });
+            })
+
+            $("#cancle_submit").click(function(){
+                submitView("/search");
+            });
+
+        </script>
+
+    </div>
+</th:block>
+
+</html>

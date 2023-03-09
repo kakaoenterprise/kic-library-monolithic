@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/css/mngr.css" th:href="@{/css/mngr.css}"/>
+</th:block>
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        /* <![CDATA[ */
+        var message = [[${joined}]];
+        if(message == 'success') {
+            alert("가입 성공하였습니다. 로그인해주세요~~!!")
+        }
+        /* ]]> */
+    </script>
+</th:block>
+<th:block layout:fragment="content">
+    <div class="alert-danger" th:if="${loginErr}">
+        <p>아이디 또는 패스워드를 확인하세요.</p>
+    </div>
+    <div id="form-group" class="form-group">
+        <form th:action="@{/authenticate}" th:object="${manager}" method="POST">
+            <table class="form-table">
+                <tr>
+                    <td><label for="librarianId">Id</label></td>
+                    <td>
+                        <input type="text" th:field="*{librarianId}" id="librarianId" placeholder="아이디"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="password">Password</label></td>
+                    <td>
+                        <input type="password" th:field="*{password}" id="password" placeholder="패스워드"/>
+                    </td>
+                </tr>
+            </table>
+            <div class="submit">
+                <button type="button" name="login" id="login">Login</button>
+                <button type="button" name="join"  id="join" >Join</button>
+            </div>
+        </form>
+
+        <script>
+            $("#login").click( function(){
+                let librarianId= $("#librarianId").val();
+                let password = $("#password").val();
+                console.log("id/pwd"+ librarianId + "/" + password);
+                $.ajax({
+                    url: "/api/manageraccount/checkAuthentication/"+librarianId + "/" + password,
+                    method: "GET",
+                    dataType: "text",
+
+                    success: function(data, textStatus, request){
+                        //request.getResponseHeader('token');
+                        //console.log("response token : " + request.getResponseHeader('token')+" :" + data);
+                        jwt_token= request.getResponseHeader('token');
+                        $.cookie('jwt_token', jwt_token);
+                        indexView();
+                    }
+                });
+            })
+
+            $("#join").click( function(){
+
+                $.ajax({
+                    crossOrigin: true,
+                    url: "[[${@environment.getProperty('kep.manageraccount.url')}]]/join/",
+                    method: "GET",
+                    dataType: "text",
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader("jwt_token", jwt_token);
+                    },
+                    success: function(data, textStatus, request){
+                        console.log("load join form");
+                        $("#contents").html(data);
+                    }
+                });
+            })
+
+        </script>
+    </div>
+</th:block>
+</html>

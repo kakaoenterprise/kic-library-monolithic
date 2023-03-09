@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/kep_layout}">
+
+    <body>
+        <section layout:fragment="content">
+            <h2>검색 결과</h2>
+            <div class="container">
+                <table>
+                    <colgroup>
+                        <col width="150">
+                        <col width="250">
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>도서코드</th>
+                            <th>도서명</th>
+                            <th>출판사</th>
+                            <th>출판일</th>
+                            <th>저자</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${books}">
+                            <td th:text="${book.bookId}">도서코드</td>
+                            <td>
+                                <a th:text="${book.name}" th:href="@{'/detail/' + ${book.bookId}}">도서명</a>
+                            </td>
+                            <td th:text="${book.company}">출판사</td>
+                            <td th:text="${#dates.format(book.publishDate, 'yyyy-MM-dd')}">출판일</td>
+                            <td th:text="${book.writer}">저자</td>
+                            <td th:text="${book.status}">상태</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </body>
+
+</html>

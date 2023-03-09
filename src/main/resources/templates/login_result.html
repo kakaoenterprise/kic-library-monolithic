@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" media="all" href="../static/css/mngr.css" th:href="@{/static/css/mngr.css}"/>
+    <title>Management System Login</title>
+</head>
+<body>
+    <div class="form-group">
+        <div th:if="${session.token != null }" class="submit">
+            <p th:text="${session.token}">...</p>
+            <button type="button" name="logout" th:onclick="'location.href=\''+@{/logout}+'\''">Logout</button>
+        </div>
+    </div>
+</body>
+</html>
